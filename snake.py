@@ -3,9 +3,8 @@
 """ Snake game  main function """
 
 import pygame, random, colors
-from scene import Scene
-from title import Title
-#from player import Player
+from scene import Scene, Title
+from player import Player
 
 def display_info():
     """ Print info about display """
@@ -22,7 +21,7 @@ def main():
     title = 'Snake'
     pygame.display.set_caption(title)
 
-    #player = Player(screen, 1)
+    player = Player(screen, 1)
     scene_list = [Title(1, screen, colors.darkgreen, title, colors.red, 72), Scene(2, screen, colors.red), Scene(3, screen, colors.teal)]
 
     for scene in scene_list:
