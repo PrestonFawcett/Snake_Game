@@ -21,7 +21,7 @@ class Player:
         hit = head.collidelist(body_list)
         return hit != -1
 
-    def grow(self, n=1)
+    def grow(self, n=1):
         for i in range(n):
             current_head = self._avatar[0]
             new_head = current_head.move(self._direction)
