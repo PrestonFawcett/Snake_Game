@@ -60,4 +60,26 @@ class Title(Scene):
     def process_event(self, event):
         super().process_event(event)
         if event.type == pygame.KEYDOWN:
-            self.set_not_valid()    
+            self.set_not_valid()
+
+class Level(Scene):
+        def __init__(self, scene_id, screen, background_color, player):
+            super().__init__(scene_id, screen, background_color)
+            self._player = player
+            #self._score = TimerScore()
+
+        def draw(self):
+            super().draw()
+            self._player.draw()
+            #print('The score is {}'.format(self._score))
+
+        def process_event(self, event):
+            super().process_event(event)
+            self._player.process_event(event)
+
+        def update(self):
+            self._player.update()
+            if self._player.intersecting():
+                print('You collided with yourself')
+            #self._score_click()
+            #self._player.process_event(event)
