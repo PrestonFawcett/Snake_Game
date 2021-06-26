@@ -23,9 +23,11 @@ class Player:
 
     def grow(self, n=1):
         for i in range(n):
+            print('Grew one segment')
             current_head = self._avatar[0]
             new_head = current_head.move(self._direction)
-            self._avatar.insert(0, new_head)
+            # self._avatar.insert(0, new_head)
+            self._avatar.append(new_head)
 
     def process_event(self, event):
         if event.type == pygame.KEYDOWN:

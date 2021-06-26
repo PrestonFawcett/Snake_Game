@@ -5,7 +5,8 @@
 import pygame, random, colors
 from scene import Scene, Title, Level, GameOver
 from player import Player
-#from rungame import play
+from food import Food
+# from rungame import play
 
 def display_info():
     """ Print info about display """
@@ -19,12 +20,13 @@ def main():
     window_size = (800, 800)
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode(window_size)
-    title = 'Snake'
-    pygame.display.set_caption(title)
+    pygame.display.set_caption('Snake')
 
     player = Player(screen, 1)
-    scene_list = [Title(1, screen, colors.darkgreen, title, colors.red, 72), 
-    Level(2, screen, colors.black, player), GameOver(3, screen, colors.black)]
+    food = Food(screen)
+    scene_list = [Title(1, screen, colors.darkgreen), 
+    Level(2, screen, colors.black, player, food), 
+    GameOver(3, screen, colors.black, clock)]
 
     for scene in scene_list:
         scene.start_scene()
@@ -37,6 +39,6 @@ def main():
             pygame.display.update()
         scene.end_scene()
     pygame.quit()
-
+    
 if __name__ == '__main__':
     main()

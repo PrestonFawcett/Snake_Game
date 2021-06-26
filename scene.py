@@ -1,4 +1,5 @@
 import pygame, colors
+# from rungame import play
 
 class Scene():
     def __init__(self, scene_id, screen, background_color=colors.black):
@@ -42,7 +43,8 @@ class Scene():
         return 'Scene {}'.format(self._id)
 
 class Title(Scene):
-    def __init__(self, scene_id, screen, background_color, title, title_color, title_size):
+    def __init__(self, scene_id, screen, background_color, 
+    title='Snake', title_color=colors.red, title_size=72):
         super().__init__(scene_id, screen, background_color)
         title_font = pygame.font.Font(pygame.font.get_default_font(), title_size)
         self._title = title_font.render(title, True, title_color)
@@ -63,16 +65,18 @@ class Title(Scene):
             self.set_not_valid()
 
 class Level(Scene):
-    def __init__(self, scene_id, screen, background_color, player):
+    def __init__(self, scene_id, screen, background_color, player, food):
         super().__init__(scene_id, screen, background_color)
         self._field = (16, 16, 768, 768)
         self._player = player
+        self._food = food
         #self._score = TimerScore()
 
     def draw(self):
         super().draw()
         pygame.draw.rect(self._screen, colors.green, self._field)
         self._player.draw()
+        self._food.draw()
         #print('The score is {}'.format(self._score))
 
     def out_of_bounds(self):
@@ -80,11 +84,19 @@ class Level(Scene):
         in_bounds = head.colliderect(self._field)
         return in_bounds != 1
 
+    def eat_food(self):
+        head = self._player._avatar[0]
+        return head.colliderect(self._food._grape)
+
     def process_event(self, event):
         super().process_event(event)
         self._player.process_event(event)
 
     def update(self):
+        if self.eat_food():
+            print('Ate food')
+            self._player.grow()
+            self._food.update()
         self._player.update()
         if self._player.intersecting():
             print('You collided with yourself')
@@ -96,7 +108,7 @@ class Level(Scene):
         #self._player.process_event(event)
 
 class GameOver(Scene):
-    def __init__(self, scene_id, screen, background_color):
+    def __init__(self, scene_id, screen, background_color, clock):
         super().__init__(scene_id, screen, background_color)
         header_font = pygame.font.Font(pygame.font.get_default_font(), 80)
         self._header = header_font.render('Game Over', True, colors.white)
@@ -115,8 +127,5 @@ class GameOver(Scene):
     # def process_event(self, event):
     #     super().process_event(event)
     #     if event.type == pygame.KEYDOWN:
-    #         if event.key == pygame.K_y
-    #            restart()
-
-    # def restart(self):
-        
+    #         if event.key == pygame.K_y:
+    #             play(screen, clock)        
