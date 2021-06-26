@@ -44,7 +44,7 @@ class Player:
 
     def draw(self):
         rect = self._avatar[0]
-        pygaem.draw.rect(self._screen, colors.blue, rect)
+        pygame.draw.rect(self._screen, colors.blue, rect)
 
     def update(self):
         current_head = self._avatar[0]
