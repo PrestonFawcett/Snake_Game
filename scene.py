@@ -1,7 +1,7 @@
 import pygame, colors
 
 class Scene():
-    def __init__(self, scene_id, screen, background_color):
+    def __init__(self, scene_id, screen, background_color=colors.black):
         self._id = scene_id
         self._screen = screen
         self._background = pygame.Surface(self._screen.get_size())
@@ -94,3 +94,29 @@ class Level(Scene):
         
         #self._score_click()
         #self._player.process_event(event)
+
+class GameOver(Scene):
+    def __init__(self, scene_id, screen, background_color):
+        super().__init__(scene_id, screen, background_color)
+        header_font = pygame.font.Font(pygame.font.get_default_font(), 80)
+        self._header = header_font.render('Game Over', True, colors.white)
+        play_again_font = pygame.font.Font(pygame.font.get_default_font(), 30)
+        self._play_again = play_again_font.render('Press \'y\' to play again',
+         True, colors.white)
+        (w, h) = self._screen.get_size()
+        self._header_pos = self._header.get_rect(center = (w/2, h/2))
+        self._play_again_pos = self._play_again.get_rect(center = (w/2, h - 50))
+
+    def draw(self):
+        super().draw()
+        self._screen.blit(self._header, self._header_pos)
+        self._screen.blit(self._play_again, self._play_again_pos)
+
+    # def process_event(self, event):
+    #     super().process_event(event)
+    #     if event.type == pygame.KEYDOWN:
+    #         if event.key == pygame.K_y
+    #            restart()
+
+    # def restart(self):
+        

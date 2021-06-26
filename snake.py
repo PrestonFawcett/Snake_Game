@@ -3,8 +3,9 @@
 """ Snake game  main function """
 
 import pygame, random, colors
-from scene import Scene, Title, Level
+from scene import Scene, Title, Level, GameOver
 from player import Player
+#from rungame import play
 
 def display_info():
     """ Print info about display """
@@ -23,7 +24,7 @@ def main():
 
     player = Player(screen, 1)
     scene_list = [Title(1, screen, colors.darkgreen, title, colors.red, 72), 
-    Level(2, screen, colors.black, player), Scene(3, screen, colors.teal)]
+    Level(2, screen, colors.black, player), GameOver(3, screen, colors.black)]
 
     for scene in scene_list:
         scene.start_scene()
