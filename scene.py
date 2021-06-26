@@ -63,23 +63,34 @@ class Title(Scene):
             self.set_not_valid()
 
 class Level(Scene):
-        def __init__(self, scene_id, screen, background_color, player):
-            super().__init__(scene_id, screen, background_color)
-            self._player = player
-            #self._score = TimerScore()
+    def __init__(self, scene_id, screen, background_color, player):
+        super().__init__(scene_id, screen, background_color)
+        self._field = (16, 16, 768, 768)
+        self._player = player
+        #self._score = TimerScore()
 
-        def draw(self):
-            super().draw()
-            self._player.draw()
-            #print('The score is {}'.format(self._score))
+    def draw(self):
+        super().draw()
+        pygame.draw.rect(self._screen, colors.green, self._field)
+        self._player.draw()
+        #print('The score is {}'.format(self._score))
 
-        def process_event(self, event):
-            super().process_event(event)
-            self._player.process_event(event)
+    def out_of_bounds(self):
+        head = self._player._avatar[0]
+        in_bounds = head.colliderect(self._field)
+        return in_bounds != 1
 
-        def update(self):
-            self._player.update()
-            if self._player.intersecting():
-                print('You collided with yourself')
-            #self._score_click()
-            #self._player.process_event(event)
+    def process_event(self, event):
+        super().process_event(event)
+        self._player.process_event(event)
+
+    def update(self):
+        self._player.update()
+        if self._player.intersecting():
+            print('You collided with yourself')
+        if self.out_of_bounds():
+            print('You collided with the wall')
+            super().set_not_valid()
+        
+        #self._score_click()
+        #self._player.process_event(event)

@@ -1,4 +1,4 @@
-import pygame, os.path, colors
+import pygame, os.path, colors, time
 from scene import Scene
 
 class Player:
@@ -47,6 +47,7 @@ class Player:
         pygame.draw.rect(self._screen, colors.blue, rect)
 
     def update(self):
+        time.sleep(0.07)
         current_head = self._avatar[0]
         new_head = current_head.move(self._direction)
         self._avatar.insert(0, new_head)
