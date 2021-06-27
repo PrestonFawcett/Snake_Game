@@ -1,4 +1,4 @@
-import pygame, ospath
+import pygame, os.path
 
 class Score():
     main_dir = os.path.split(os.path.abspath(__file__))[0]
@@ -25,14 +25,14 @@ class Score():
 
 class TimerScore(Score):
     def __init__(self, points_per_click=1, click_time_ms=3000):
-        super().init__()
+        super().__init__()
         self._points_per_click = points_per_click
         self._click_time= click_time_ms
         self._last_time = pygame.time.get_ticks()
 
     def click(self):
-        current_time = pygame.get_ticks()
-        elapsed = curent_time - self._last_time
+        current_time = pygame.time.get_ticks()
+        elapsed = current_time - self._last_time
         if elapsed > self._click_time:
             self._last_time = current_time
             self._score += self._points_per_click
