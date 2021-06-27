@@ -12,22 +12,14 @@ class Player:
         self._direction = (0, 0)
         self._speed = speed * self._dimension[0]
         (w,h) = self._screen.get_size()
-        self._avatar = [pygame.Rect((w/2, h/2), self._dimension)]
+        self._avatar = [(w/2, h/2)]
         self._last_key = None
 
     def intersecting(self):
-        head = self._avatar[0]
-        body_list = self._avatar[1:]
-        hit = head.collidelist(body_list)
-        return hit != -1
-
-    def grow(self, n=1):
-        for i in range(n):
-            print('Grew one segment')
-            current_head = self._avatar[0]
-            new_head = current_head.move(self._direction)
-            # self._avatar.insert(0, new_head)
-            self._avatar.append(new_head)
+        for body in self._avatar[1:]:
+            if body[0] == self._avatar[0][0] and body[1] == self._avatar[0][1]:
+                return True
+        return False
 
     def process_event(self, event):
         if event.type == pygame.KEYDOWN:
@@ -45,12 +37,17 @@ class Player:
                 self._last_key = event.key
 
     def draw(self):
-        rect = self._avatar[0]
-        pygame.draw.rect(self._screen, colors.blue, rect)
+        for coords in self._avatar:
+            x = int(coords[0])
+            y = int(coords[1])
+            segment = pygame.Rect(x, y, 32, 32)
+            pygame.draw.rect(self._screen, colors.blue, segment)
 
     def update(self):
         time.sleep(0.07)
-        current_head = self._avatar[0]
-        new_head = current_head.move(self._direction)
+        (head_pos_x, head_pos_y) = self._avatar[0]
+        new_head = ((head_pos_x + self._direction[0]), (head_pos_y + self._direction[1]))
+        # new_head = current_head.move(self._direction)
         self._avatar.insert(0, new_head)
-        self._avatar = self._avatar[0:len(self._avatar) - 1]
+        
+        # self._avatar = self._avatar[0:len(self._avatar) - 1]

@@ -6,21 +6,19 @@ class Food():
         self._dimension = (32, 32)
         self._x = 32 * random.randint(0, 23) + 16
         self._y = 32 * random.randint(0, 23) + 16
-        self._grape = pygame.Rect((self._x, self._y), self._dimension)
-        self._exists = True
+        self._grape = (self._x, self._y)
+        self._respawn = False
         
     def draw(self):
-        pygame.draw.rect(self._screen, colors.purple, self._grape)
+        if self._respawn:
+            self._x = 32 * random.randint(0, 23) + 16
+            self._y = 32 * random.randint(0, 23) + 16
+            self._respawn = False
+        grape = pygame.Rect(self._x, self._y, 32, 32)
+        pygame.draw.rect(self._screen, colors.purple, grape)
 
-    def exists(self):
-        return self._exists
-
-    def set_not_exist(self):
-        self._exists = False
+    def get_rand_pos(self):
+        return ((32 * random.randint(0, 23) + 16), (32 * random.randint(0, 23) + 16))
 
     def update(self):
-        current_grape = self._grape
-        
-        self._x = 32 * random.randint(0, 23) + 16
-        self._y = 32 * random.randint(0, 23) + 16
-        self._grape.move(self._x, self._y)
+        self._respawn = True

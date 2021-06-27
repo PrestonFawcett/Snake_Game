@@ -80,26 +80,32 @@ class Level(Scene):
         #print('The score is {}'.format(self._score))
 
     def out_of_bounds(self):
-        head = self._player._avatar[0]
-        in_bounds = head.colliderect(self._field)
-        return in_bounds != 1
+        (x, y) = self._player._avatar[0]
+        if x < 16 or x > 768 or y < 16 or y > 768:
+            return True
+        return False
 
     def eat_food(self):
-        head = self._player._avatar[0]
-        return head.colliderect(self._food._grape)
+        (x, y) = self._player._avatar[0]
+        if x == self._food._x and y == self._food._y:
+            return True
 
     def process_event(self, event):
         super().process_event(event)
         self._player.process_event(event)
 
     def update(self):
+            # self._player.grow()
+        #     self._food.update()
+        self._player.update()
         if self.eat_food():
             print('Ate food')
-            self._player.grow()
             self._food.update()
-        self._player.update()
+        else:
+            del self._player._avatar[-1]
         if self._player.intersecting():
             print('You collided with yourself')
+            super().set_not_valid()
         if self.out_of_bounds():
             print('You collided with the wall')
             super().set_not_valid()
