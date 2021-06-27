@@ -47,7 +47,4 @@ class Player:
         time.sleep(0.07)
         (head_pos_x, head_pos_y) = self._avatar[0]
         new_head = ((head_pos_x + self._direction[0]), (head_pos_y + self._direction[1]))
-        # new_head = current_head.move(self._direction)
         self._avatar.insert(0, new_head)
-        
-        # self._avatar = self._avatar[0:len(self._avatar) - 1]

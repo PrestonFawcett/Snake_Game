@@ -95,14 +95,13 @@ class Level(Scene):
         self._player.process_event(event)
 
     def update(self):
-            # self._player.grow()
-        #     self._food.update()
         self._player.update()
         if self.eat_food():
             print('Ate food')
             self._food.update()
         else:
             del self._player._avatar[-1]
+            print('Grew one segment')
         if self._player.intersecting():
             print('You collided with yourself')
             super().set_not_valid()
