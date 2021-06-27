@@ -1,5 +1,5 @@
 import pygame, colors
-# from rungame import play
+from score import Score, TimerScore
 
 class Scene():
     def __init__(self, scene_id, screen, background_color=colors.black):
@@ -70,14 +70,14 @@ class Level(Scene):
         self._field = (16, 16, 768, 768)
         self._player = player
         self._food = food
-        #self._score = TimerScore()
+        self._score = TimerScore()
 
     def draw(self):
         super().draw()
         pygame.draw.rect(self._screen, colors.green, self._field)
         self._player.draw()
         self._food.draw()
-        #print('The score is {}'.format(self._score))
+        print('The score is {}'.format(self._score))
 
     def out_of_bounds(self):
         (x, y) = self._player._avatar[0]
@@ -110,8 +110,7 @@ class Level(Scene):
             print('You collided with the wall')
             super().set_not_valid()
         
-        #self._score_click()
-        #self._player.process_event(event)
+        self._score.click()
 
 class GameOver(Scene):
     def __init__(self, scene_id, screen, background_color, clock):
