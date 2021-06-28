@@ -2,11 +2,15 @@
 
 """ Snake game  main function """
 
-import pygame, random, colors
-from scene import Scene, Title, Level, GameOver
+import pygame
+import colors
+from scene import Title, Level, GameOver
 from player import Player
 from food import Food
-# from rungame import play
+
+__author__ = 'Preston Fawcett'
+__email__ = 'ptfawcett@csu.fullerton.edu'
+__maintainer__ = 'PrestonFawcett'
 
 def display_info():
     """ Print info about display """
@@ -15,6 +19,7 @@ def display_info():
     print(pygame.display.Info())
 
 def main():
+    """ Runs game """
     pygame.init()
     display_info()
     window_size = (800, 800)
@@ -24,9 +29,9 @@ def main():
 
     player = Player(screen, 1)
     food = Food(screen)
-    scene_list = [Title(1, screen, colors.darkgreen), 
-    Level(2, screen, colors.black, player, food), 
-    GameOver(3, screen, colors.black, clock)]
+    scene_list = [Title(1, screen, colors.darkgreen),
+                  Level(2, screen, colors.black, player, food),
+                  GameOver(3, screen, colors.black)]
 
     for scene in scene_list:
         scene.start_scene()
@@ -39,6 +44,6 @@ def main():
             pygame.display.update()
         scene.end_scene()
     pygame.quit()
-    
+
 if __name__ == '__main__':
     main()

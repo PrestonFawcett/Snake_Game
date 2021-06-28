@@ -1,5 +1,9 @@
 """ List of colors """
 
+__author__ = 'Preston Fawcett'
+__email__ = 'ptfawcett@csu.fullerton.edu'
+__maintainer__ = 'PrestonFawcett'
+
 black = (0, 0, 0)
 red = (255, 0, 0)
 orange = (255, 128, 0)
