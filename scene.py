@@ -106,7 +106,6 @@ class Level(Scene):
         self._player.draw()
         self._food.draw()
         self._screen.blit(self._display_score, self._score_pos)
-        # print('The score is {}'.format(self._score))
 
     def out_of_bounds(self):
         """ Return true if player hits wall """
@@ -133,13 +132,15 @@ class Level(Scene):
         self._player.update()
         if self.eat_food():
             self._food.update()
-            self._score.add_bonus(1)
+            self._score.add_bonus(5)
             print('Ate food')
             print('Grew one segment')
         else:
             del self._player._avatar[-1]
         if self._player.intersecting() or self.out_of_bounds():
-            write(self._score)
+            print('Score: {}'.format(self._score))
+            write(self._score._score)
+            read()
             super().set_not_valid()
         self._score.click()
         self._display_score = self._score_font.render(
@@ -151,15 +152,25 @@ class GameOver(Scene):
         super().__init__(scene_id, screen, background_color)
         header_font = pygame.font.Font(pygame.font.get_default_font(), 80)
         self._header = header_font.render('Game Over', True, colors.white)
+        high_score_font = pygame.font.Font(pygame.font.get_default_font(), 60)
+        self._high_score = high_score_font.render('High Score', True, colors.white)
         play_again_font = pygame.font.Font(pygame.font.get_default_font(), 30)
         self._play_again = play_again_font.render(
-            'Press \'y\' to play again', True, colors.white)
+            'Press \'esc\' to quit.', True, colors.white)
         (w, h) = self._screen.get_size()
-        self._header_pos = self._header.get_rect(center=(w/2, h/2))
+        self._header_pos = self._header.get_rect(center=(w/2, 100))
+        self._high_score_pos = self._high_score.get_rect(center=(w/2, 200))
         self._play_again_pos = self._play_again.get_rect(center=(w/2, h - 50))
+        self._leader_board_list = read()
 
     def draw(self):
         """ Draws the game over scene """
         super().draw()
         self._screen.blit(self._header, self._header_pos)
+        self._screen.blit(self._high_score, self._high_score_pos)
+        for i in range(len(self._leader_board_list)):
+            leader_board_font = pygame.font.Font(pygame.font.get_default_font(), 40)
+            self._leader_board = leader_board_font.render('{}: {}'.format(i+1, self._leader_board_list[i]), True, colors.white)
+            self._leader_board_pos = self._leader_board.get_rect(center=(400, (250 + i * 50)))
+            self._screen.blit(self._leader_board, self._leader_board_pos)
         self._screen.blit(self._play_again, self._play_again_pos)
