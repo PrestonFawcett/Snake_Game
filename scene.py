@@ -19,6 +19,7 @@ class Scene():
         self._background = pygame.Surface(self._screen.get_size())
         self._background.fill(background_color)
         self._is_valid = True
+        self._restart = False
         self._frame_rate = 60
 
     def draw(self):
@@ -30,7 +31,7 @@ class Scene():
         """ Process events to leave scene """
         if event.type == pygame.QUIT:
             print('Quiting program')
-            self.set_not_valid()
+            pygame.quit()
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             self.set_not_valid()
 
@@ -45,6 +46,14 @@ class Scene():
     def set_not_valid(self):
         """ Set not valid, continues to next scene """
         self._is_valid = False
+
+    def restart(self):
+        """ Get restart """
+        return self._restart
+
+    def set_restart(self):
+        """ Set to resart """
+        self._restart = True
 
     def start_scene(self):
         """ Console info notifying scene has started """
@@ -64,12 +73,11 @@ class Scene():
 
 class Title(Scene):
     """ subclass for Title scene """
-    def __init__(self, scene_id, screen, background_color,
-                 title='Snake', title_color=colors.red, title_size=72):
+    def __init__(self, scene_id, screen, background_color):
         super().__init__(scene_id, screen, background_color)
-        title_font = pygame.font.Font(pygame.font.get_default_font(), title_size)
+        title_font = pygame.font.Font(pygame.font.get_default_font(), 72)
         press_any_key_font = pygame.font.Font(pygame.font.get_default_font(), 22)
-        self._title = title_font.render(title, True, title_color)
+        self._title = title_font.render('Snake', True, colors.red)
         self._press_any_key = press_any_key_font.render('Press any key.', True, colors.black)
         self._title_pos = self._title.get_rect(center=(400, 400))
         self._press_any_key_pos = self._press_any_key.get_rect(center=(400, 750))
@@ -200,7 +208,7 @@ class GameOver(Scene):
         self._high_score = high_score_font.render('High Score', True, colors.white)
         play_again_font = pygame.font.Font(pygame.font.get_default_font(), 30)
         self._play_again = play_again_font.render(
-            'Press \'esc\' to quit.', True, colors.white)
+            'Press \'r\' to restart. Press \'q\' to quit.', True, colors.white)
         (w, h) = self._screen.get_size()
         self._header_pos = self._header.get_rect(center=(w/2, 100))
         self._high_score_pos = self._high_score.get_rect(center=(w/2, 200))
@@ -218,3 +226,13 @@ class GameOver(Scene):
             self._leader_board_pos = self._leader_board.get_rect(center=(400, (250 + i * 50)))
             self._screen.blit(self._leader_board, self._leader_board_pos)
         self._screen.blit(self._play_again, self._play_again_pos)
+
+    def process_event(self, event):
+        """ Restarts or quits game """
+        super().process_event(event)
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_r:
+                self.set_restart()
+                self.set_not_valid()
+            elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
+                pygame.quit()
