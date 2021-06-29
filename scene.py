@@ -3,6 +3,7 @@
 
 import pygame
 import colors
+from food import Food
 from score import TimerScore
 from highscore import write, read
 
@@ -67,12 +68,11 @@ class Title(Scene):
                  title='Snake', title_color=colors.red, title_size=72):
         super().__init__(scene_id, screen, background_color)
         title_font = pygame.font.Font(pygame.font.get_default_font(), title_size)
-        self._title = title_font.render(title, True, title_color)
         press_any_key_font = pygame.font.Font(pygame.font.get_default_font(), 22)
+        self._title = title_font.render(title, True, title_color)
         self._press_any_key = press_any_key_font.render('Press any key.', True, colors.black)
-        (w, h) = self._screen.get_size()
-        self._title_pos = self._title.get_rect(center=(w/2, h/2))
-        self._press_any_key_pos = self._press_any_key.get_rect(center=(w/2, h - 50))
+        self._title_pos = self._title.get_rect(center=(400, 400))
+        self._press_any_key_pos = self._press_any_key.get_rect(center=(400, 750))
 
     def draw(self):
         """ Draws title and related info """
@@ -86,18 +86,62 @@ class Title(Scene):
         if event.type == pygame.KEYDOWN:
             self.set_not_valid()
 
+class Instruction(Scene):
+    """ subclass for Instruction scene """
+    def __init__(self, scene_id, screen, background_color):
+        super().__init__(scene_id, screen, background_color)
+        header_str = 'Instructions'
+        line1_str = 'Use arrow keys to move'
+        line2_str = 'Every 3 seconds you will score 1 point'
+        line3_str = 'every food you eat will award you 5 points'
+        line4_str = 'If you hit yourself or the wall you will lose'
+        header_font = pygame.font.Font(pygame.font.get_default_font(), 50)
+        line1_font = pygame.font.Font(pygame.font.get_default_font(), 30)
+        line2_font = pygame.font.Font(pygame.font.get_default_font(), 30)
+        line3_font = pygame.font.Font(pygame.font.get_default_font(), 30)
+        line4_font = pygame.font.Font(pygame.font.get_default_font(), 30)
+        press_any_key_font = pygame.font.Font(pygame.font.get_default_font(), 22)
+        self._header = header_font.render(header_str, True, colors.white)
+        self._line1 = line1_font.render(line1_str, True, colors.white)
+        self._line2 = line2_font.render(line2_str, True, colors.white)
+        self._line3 = line3_font.render(line3_str, True, colors.white)
+        self._line4 = line4_font.render(line4_str, True, colors.white)
+        self._press_any_key = press_any_key_font.render('Press any key.', True, colors.white)
+        self._header_pos = self._header.get_rect(center=(400, 100))
+        self._line1_pos = self._line1.get_rect(center=(400, 150))
+        self._line2_pos = self._line2.get_rect(center=(400, 200))
+        self._line3_pos = self._line3.get_rect(center=(400, 250))
+        self._line4_pos = self._line4.get_rect(center=(400, 300))
+        self._press_any_key_pos = self._press_any_key.get_rect(center=(400, 750))
+
+    def draw(self):
+        """ Draws the instructions """
+        super().draw()
+        self._screen.blit(self._header, self._header_pos)
+        self._screen.blit(self._line1, self._line1_pos)
+        self._screen.blit(self._line2, self._line2_pos)
+        self._screen.blit(self._line3, self._line3_pos)
+        self._screen.blit(self._line4, self._line4_pos)
+        self._screen.blit(self._press_any_key, self._press_any_key_pos)
+    
+    def process_event(self, event):
+        super().process_event(event)
+        if event.type == pygame.KEYDOWN:
+            self.set_not_valid()
+        
+
 class Level(Scene):
     """ Subclass for Level scene """
-    def __init__(self, scene_id, screen, background_color, player, food):
+    def __init__(self, scene_id, screen, background_color, player):
         super().__init__(scene_id, screen, background_color)
         self._field = (16, 16, 768, 768)
         self._player = player
-        self._food = food
+        self._food = Food(screen)
         self._score = TimerScore()
         self._score_font = pygame.font.Font(pygame.font.get_default_font(), 25)
         self._display_score = self._score_font.render(
             'Score: {}'.format(self._score), True, colors.white)
-        self._score_pos = self._display_score.get_rect(center=(710, 32))
+        self._score_pos = self._display_score.get_rect(topleft=(32, 32))
 
     def draw(self):
         """ Draws level scene """
