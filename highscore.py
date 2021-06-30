@@ -9,6 +9,7 @@ __maintainer__ = 'PrestonFawcett'
 
 def write(score):
     """ Save top 5 scores to a list """
+    high_score = list()
     high_score = list(read())
     
     high_score.append(score)
@@ -21,7 +22,6 @@ def read():
     """ Return saved scores """
     with open('game_data.pickle', 'rb') as fh:
         high_score = pickle.load(fh)
-        print(high_score)
         return high_score
 
 if __name__ == '__main__':

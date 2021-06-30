@@ -7,6 +7,7 @@ import colors
 from scene import Title, Instruction, Level, GameOver
 from player import Player
 from food import Food
+from highscore import write
 
 __author__ = 'Preston Fawcett'
 __email__ = 'ptfawcett@csu.fullerton.edu'
@@ -26,6 +27,7 @@ def main():
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode(window_size)
     pygame.display.set_caption('Snake')
+    write(0)
 
     player = Player(screen, 1)
     scene_list = [Title(1, screen, colors.darkgreen),

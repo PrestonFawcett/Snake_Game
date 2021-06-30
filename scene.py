@@ -170,9 +170,14 @@ class Level(Scene):
     def eat_food(self):
         """ Return true player eats food """
         (x, y) = self._player._avatar[0]
-        if x == self._food._x and y == self._food._y:
-            return True
+        index = 0
+        for coords in self._food._food:
+            if coords[0] == x and coords[1] == y:
+                del self._food._food[index]
+                return True
+            index += 1
         return False
+            # if body[0] == self._avatar[0][0] and body[1] == self._avatar[0][1]:
 
     def process_event(self, event):
         """ Processes all events associated with level """
@@ -182,8 +187,8 @@ class Level(Scene):
     def update(self):
         """ updates the game for every state change """
         self._player.update()
+        self._food.update()
         if self.eat_food():
-            self._food.update()
             self._score.add_bonus(5)
             print('Ate food')
             print('Grew one segment')
@@ -218,11 +223,12 @@ class GameOver(Scene):
     def draw(self):
         """ Draws the game over scene """
         super().draw()
+        leader_board_list = read()
         self._screen.blit(self._header, self._header_pos)
         self._screen.blit(self._high_score, self._high_score_pos)
         for i in range(len(self._leader_board_list)):
             leader_board_font = pygame.font.Font(pygame.font.get_default_font(), 40)
-            self._leader_board = leader_board_font.render('{}: {}'.format(i+1, self._leader_board_list[i]), True, colors.white)
+            self._leader_board = leader_board_font.render('{}: {}'.format(i+1, leader_board_list[i]), True, colors.white)
             self._leader_board_pos = self._leader_board.get_rect(center=(400, (250 + i * 50)))
             self._screen.blit(self._leader_board, self._leader_board_pos)
         self._screen.blit(self._play_again, self._play_again_pos)
